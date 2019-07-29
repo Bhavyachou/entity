@@ -371,7 +371,7 @@ export default {
   data: () => ({
     rowNum: 0,
     Lasttid: 0,
-    baseURl: "http://localhost:3000/",
+    baseURl: "http://3.218.108.144:4206/",
     isDis: true,
     tabs: "",
     keyData: {
