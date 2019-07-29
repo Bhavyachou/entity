@@ -5,27 +5,27 @@ module.exports = {
      */
     apps: [
       {
-        name: "VEN",
+        name: "ENTITY",
         script: "./back-end/index.js",
         cwd: process.cwd(),
         env: {
           COMMON_VARIABLE: "true"
         },
         env_production: {
-            "PORT": process.env.VEN_PRODUCTION_PORT,
+            "PORT": process.env.ENTITY_PRODUCTION_PORT,
             NODE_ENV: "production",
-            HOST: process.env.VEN_MYSQL_URL_HOST,
-            USER: process.env.VEN_MYSQL_USERNAME_USER,
-            PASSWORD: process.env.VEN_MYSQL_PASSWORD,
-            DATABASE: process.env.VEN_MYSQL_DATABASE
+            HOST: process.env.ENTITY_MYSQL_URL_HOST,
+            USER: process.env.ENTITY_MYSQL_USERNAME_USER,
+            PASSWORD: process.env.ENTITY_MYSQL_PASSWORD,
+            DATABASE: process.env.ENTITY_MYSQL_DATABASE
         },
         env_staging: {
-            "PORT": process.env.VEN_PRODUCTION_PORT,
+            "PORT": process.env.ENTITY_PRODUCTION_PORT,
             NODE_ENV: "production",
-            HOST: process.env.VEN_MYSQL_URL_HOST,
-            USER: process.env.VEN_MYSQL_USERNAME_USER,
-            PASSWORD: process.env.VEN_MYSQL_PASSWORD,
-            DATABASE: process.env.VEN_MYSQL_DATABASE
+            HOST: process.env.ENTITY_MYSQL_URL_HOST,
+            USER: process.env.ENTITY_MYSQL_USERNAME_USER,
+            PASSWORD: process.env.ENTITY_MYSQL_PASSWORD,
+            DATABASE: process.env.ENTITY_MYSQL_DATABASE
         }
       }
     ]
