@@ -262,7 +262,7 @@ export default {
   Name: "KeyCommericalTerms",
   props: ["items"],
   data: () => ({
-    baseURl: "http://localhost:3000/",
+    baseURl: ""http://3.218.108.144:4206/"",
     isDis: true,
     tabs: "",
     rowNum: 0,
