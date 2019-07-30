@@ -13,7 +13,7 @@
                   style="display: flex; overflow-x: auto; "
                 >
                   <template v-slot:items="props" style="display: flex; overflow-x: auto;">
-                    <tr v-for="item1 in rowNum" :key="item1" style="border-style: solid; margin-top:0.1%;">
+                    <tr v-for="item1 in rowNum" :key="item1" style="border-style: solid;">
                       <td>
                         <tr class="text-xs-center" style="padding:0px; " width="300">
                           <v-combobox
@@ -205,7 +205,7 @@
                   <v-dialog width="500">
                     <template v-slot:activator="{ on }">
                       <v-btn
-                        @click="sendData(); con(); rowData(); generateData();"
+                        @click="sendData(); con(); rowData(); print();"
                         color="Green"
                         dark
                         v-on="on"
@@ -219,131 +219,95 @@
                       >Generated Tranche Details</v-card-title>
                       <v-card-text>
                         <v-data-table
-                          style="display: flex; overflow-x: auto;"
-                          :items="generateData"
-                          :headers="headers"
+                          :items="rows2"
+                          hide-default-footer
                           class="elevation-1"
-                          hide-actions
+                          style="display: flex; overflow-x: auto; "
                         >
-                          <template v-slot:items="props">
-                            <tr>
+                          <template v-slot:items="props" style="display: flex; overflow-x: auto;">
+                            <tr v-for="item2 in rowNum" :key="item2">
                               <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.commencementdate"
-                                  label="Commencement Date"
-                                ></v-text-field>
+                                Generated Details {{item2}}
+                                <tr class="tex-xs-center" style="padding:0px;">
+                                  <v-text-field
+                                    v-model="props.item.gescf[item2-1]"
+                                    label="Escalation Frequency"
+                                    v-on:keypress="isNumber(event)"
+                                    outline
+                                  ></v-text-field>
+                                </tr>
+                                <tr class="tex-xs-center" style="padding:0px;">
+                                  <v-text-field
+                                    v-model="props.item.gescp[item2-1]"
+                                    label="Escalation Percent"
+                                    v-on:keypress="isNumber(event)"
+                                    outline
+                                  ></v-text-field>
+                                </tr>
                               </td>
                               <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.gstartdate"
-                                  label="Grace Start Date"
-                                ></v-text-field>
-                              </td>
-                              <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.genddate"
-                                  label="Grace End Date"
-                                ></v-text-field>
-                              </td>
-                              <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.gescp"
-                                  label="Escalation Percent"
-                                ></v-text-field>
-                              </td>
-                              <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.gescf"
-                                  label="Escalation Frequency"
-                                ></v-text-field>
-                              </td>
-                              <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.gfirstescdate"
-                                  label="First Escalation Date"
-                                ></v-text-field>
-                              </td>
-                              <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.gfirstescdate"
-                                  label="Second Escalation Date"
-                                ></v-text-field>
+                                Modified Details {{item2}}
+                                <tr class="tex-xs-center" style="padding:0px;">
+                                  <v-text-field
+                                    v-model="props.item.mescf[item2-1]"
+                                    label="Escalation Frequency"
+                                    v-on:keypress="isNumber(event)"
+                                    outline
+                                  ></v-text-field>
+                                </tr>
+                                <tr class="tex-xs-center" style="padding:0px;">
+                                  <v-text-field
+                                    v-model="props.item.mescp[item2-1]"
+                                    label="Escalation Percent"
+                                    v-on:keypress="isNumber(event)"
+                                    outline
+                                  ></v-text-field>
+                                </tr>
                               </td>
                             </tr>
-                            <tr>
-                              <td>
+
+                            <td>
+                              Total Generated Details
+                              <tr class="tex-xs-center" style="padding:0px;">
                                 <v-text-field
-                                  style="padding:0px;"
+                                  @click="total()"
+                                  v-model="totalData.gescf"
+                                  label="Total Generated Escalation Frequency"
+                                  v-on:keypress="isNumber(event)"
                                   outline
-                                  v-model="generateData.mcommencementdate"
-                                  label="Commencement Date"
                                 ></v-text-field>
-                              </td>
-                              <td>
+                              </tr>
+                              <tr class="tex-xs-center" style="padding:0px;">
                                 <v-text-field
-                                  style="padding:0px;"
+                                  v-model="totalData.gescf"
+                                  label="Total Generated Escalation Percent"
+                                  v-on:keypress="isNumber(event)"
                                   outline
-                                  v-model="generateData.mgstartdate"
-                                  label="Grace Start Date"
                                 ></v-text-field>
-                              </td>
-                              <td>
+                              </tr>
+                            </td>
+
+                            <td>
+                              Total Modified Details
+                              <tr class="tex-xs-center" style="padding:0px;">
                                 <v-text-field
-                                  style="padding:0px;"
+                                  v-model="totalData.mescf"
+                                  label="Total Modified Escalation Frequency"
+                                  v-on:keypress="isNumber(event)"
                                   outline
-                                  v-model="generateData.mgenddate"
-                                  label="Grace End Date"
                                 ></v-text-field>
-                              </td>
-                              <td>
+                              </tr>
+                              <tr class="tex-xs-center" style="padding:0px;">
                                 <v-text-field
-                                  style="padding:0px;"
+                                  v-model="totalData.mescf"
+                                  label="Total Modified Escalation Percent"
+                                  v-on:keypress="isNumber(event)"
                                   outline
-                                  v-model="generateData.mgescp"
-                                  label="Escalation Percent"
                                 ></v-text-field>
-                              </td>
-                              <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.mgescf"
-                                  label="Escalation Frequency"
-                                ></v-text-field>
-                              </td>
-                              <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.mgfirstescdate"
-                                  label="First Escalation Date"
-                                ></v-text-field>
-                              </td>
-                              <td>
-                                <v-text-field
-                                  style="padding:0px;"
-                                  outline
-                                  v-model="generateData.mgfirstescdate"
-                                  label="Second Escalation Date"
-                                ></v-text-field>
-                              </td>
-                            </tr>
-                            <v-btn @click=";" color="Green" dark v-on="on">Accept Generated Data</v-btn>
-                            <v-btn @click=";" color="Green" dark v-on="on">Accept Modified Data</v-btn>
+                              </tr>
+                            </td>
+
+                            <v-spacer></v-spacer>
                           </template>
                         </v-data-table>
                       </v-card-text>
@@ -371,7 +335,8 @@ export default {
   data: () => ({
     rowNum: 0,
     Lasttid: 0,
-    baseURl: "http://3.218.108.144:4206/",
+    Num: 0,
+    baseURl: "http://localhost:3000/",
     isDis: true,
     tabs: "",
     keyData: {
@@ -384,25 +349,14 @@ export default {
       noticeperiod: "",
       lockperiod: ""
     },
-    generateData: [
+    rows2: [
       {
-        commencementdate: "",
-        gstartdate: "",
-        genddate: "",
-        gescp: "",
-        gescf: "",
-        gfirstescdate: "",
-        gsecondescdate: "",
-        mcommencementdate: "",
-        mgstartdate: "",
-        mgenddate: "",
-        mgescp: "",
-        mgescf: "",
-        mgfirstescdate: "",
-        mgsecondescdate: ""
+        gescp: [],
+        gescf: [],
+        mescp: [],
+        mescf: []
       }
     ],
-
     rows1: {
       id: "",
       typeunit: "",
@@ -417,15 +371,6 @@ export default {
       startdate: "",
       enddate: ""
     },
-    headers: [
-      { text: "27.07.2019", value: "date1" },
-      { text: "01.08.2019", value: "date2" },
-      { text: "01.09.2019", value: "date3" },
-      { text: "01.10.2019", value: "date4" },
-      { text: "01.11.2019", value: "date5" },
-      { text: "01.12.2019", value: "date6" },
-      { text: "01.01.2020", value: "date7" }
-    ],
     rows: [
       {
         id: [],
@@ -442,6 +387,12 @@ export default {
         enddate: []
       }
     ],
+    totalData: {
+      gescf: "",
+      gescp: "",
+      mescf: "",
+      mescp: ""
+    },
     event: "",
     advances: [
       "First month",
@@ -488,7 +439,37 @@ export default {
 
       axios.post(this.baseURl + "entitymap/insert", this.items);
     },
-
+    print() {
+      for (var index = 0; index < this.rowNum; index++) {
+        this.rows2[0].gescf[index] = this.rows[0].escf[index];
+        this.rows2[0].gescp[index] = this.rows[0].escp[index];
+        console.log(this.rows2[0].gescf[index]);
+        console.log(this.rows2[0].gescp[index]);
+      }
+    },
+    total() {
+      var sumgescf = 0;
+      var sumgescp = 0;
+      var summescf = 0;
+      var summescp = 0;
+      for (var index = 0; index < this.rowNum; index++) {
+        this.rows2[0].gescf[index] = parseInt(this.rows2[0].gescf[index]);
+        this.rows2[0].gescp[index] = parseInt(this.rows2[0].gescp[index]);
+        this.rows2[0].mescf[index] = parseInt(this.rows2[0].mescf[index]);
+        this.rows2[0].mescp[index] = parseInt(this.rows2[0].mescp[index]);
+        sumgescf = sumgescf + this.rows2[0].gescf[index]
+        sumgescp = sumgescp + this.rows2[0].gescp[index]
+        summescf = summescf + this.rows2[0].mescf[index]
+        summescp = summescp + this.rows2[0].mescp[index]
+        console.log(this.rows2[0].gescf[index])
+        console.log("ty",sumgescp);
+      }
+      this.totalData.gescf = sumgescf
+      this.totalData.gescp = sumgescp
+      this.totalData.mescf = summescf
+      this.totalData.mescp = summescp
+      console.log(this.totalData.gescf )
+    },
     async rowData() {
       for (var index = 0; index < this.rowNum; index++) {
         console.log("rowNum", this.rowNum);
@@ -531,6 +512,8 @@ export default {
         this.rows1.spf = this.rows[0].spf[index];
         this.rows1.oe = this.rows[0].oe[index];
         this.rows1.or = this.rows[0].or[index];
+        this.rows1.escp = this.rows[0].escp[index];
+        this.rows1.escf = this.rows[0].escf[index];
         this.rows1.startdate = this.rows[0].startdate[index];
         this.rows1.enddate = this.rows[0].enddate[index];
 
@@ -542,6 +525,14 @@ export default {
         );
       }
     },
+    modalData() {
+      console.log(this.rows[0].escp[this.rowNum - 1]);
+      for (var index = 0; index < this.rowNum; index++) {
+        this.rows[0].gescp[index] = this.rows[0].escp[index];
+        this.rows[0].gescf[index] = this.rows[0].escf[index];
+      }
+    },
+    
     addNewRow() {
       this.items.assign({
         id: "",
@@ -617,7 +608,6 @@ export default {
             this.Lastid = response.data[0].id;
           }
         });
-      console.log("Lastid", this.Lastid);
     },
     Period() {
       for (var i = 1; i <= 48; i++) {
@@ -660,8 +650,8 @@ export default {
 </script>
 
 <style>
-tbody{
-  padding-top:0.2%;
+tbody {
+  padding-top: 0.2%;
 }
 div.v-text-field.v-text-field--enclosed {
   width: 400px;
